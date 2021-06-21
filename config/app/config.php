@@ -1,5 +1,5 @@
 <?php
-define('URL','https://localhost/tlaxroom/');
+define('URL','https://localhost/TLAXR/');
 define('HOST', 'localhost:3307');
 define('DB', 'mvc');
 define('USER', 'root');
