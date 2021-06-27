@@ -14,7 +14,7 @@
 
        <img src="image/logo_tlax_room.png" >
         <h1>Bienvenido, tlax_room</h1>
-        <a href="cerrar.php">Cerrsar sesion</a>
+        <a href="cerrar.php">Cerrar sesion</a>
    </div>
    
 </body>
