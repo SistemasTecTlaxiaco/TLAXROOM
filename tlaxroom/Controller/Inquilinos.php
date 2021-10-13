@@ -42,7 +42,7 @@
         public function editar()
         {
             $id = $_GET['id'];
-            $data = $this->model->editcideInquilinos($id);
+            $data = $this->model->editarInquilinos($id);
             if ($data == 0) {
                 $this->Listar();
             }else{
