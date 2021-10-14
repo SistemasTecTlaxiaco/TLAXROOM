@@ -1,12 +1,10 @@
-<?php
-<?php
-define('URL','https://localhost/TLAXROOM');
-define('HOST', 'localhost:3307');
-define('DB', 'mvc');
-define('USER', 'root');
-define('PASSWORD', '');
-define('CHARSET', 'utf8mb4');
-?>
 
 
+<?php
+    const URL = "http://localhost/tlaxroom/";
+    const HOST = "localhost:80";
+    const BD = "dbtlaxroomm";
+    const DB_USER = "root";
+    const PASS = "";
+    const CHARSET = "charset=utf8";
 ?>
