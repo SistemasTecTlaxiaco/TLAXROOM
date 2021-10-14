@@ -1,10 +1,7 @@
 <?php
-class HomeModel extends Mysql{
-    public $usuario, $clave;
-    public function __construct()
-    {
-        parent::__construct();
+class public HomeModel{
+    public function __construct(){
+        echo "conectado";
     }
-    
-}
+} 
 ?>

@@ -1,3 +1,9 @@
+<!--//php
+//require_once "headerr.php";
+//esta es la vista del administrador
+echo "comienza el contenido del admin";
+//require_once "../footer.php";
+?>-->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -685,4 +691,3 @@
         <script src="../assets/js/datatables-simple-demo.js"></script>
     </body>
 </html>
-
