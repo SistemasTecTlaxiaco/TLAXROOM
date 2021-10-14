@@ -12,6 +12,9 @@
             <div class="row">
 
                 <!-- Earnings (Monthly) Card Example -->
+                <a class="col-xl-3 col-md-6 mb-4"  href="Views\Admin\usuarios\Listar.php">
+                
+
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-0 bg-success shadow h-100 py-2">
                         <div class="card-body">
@@ -28,6 +31,7 @@
                     </div>
                 </div>
                 <!-- Earnings (Monthly) Card Example -->
+                <a class="col-xl-3 col-md-6 mb-4"  href="Views\Admin\inquilinos\Listar.php">
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-0 bg-warning shadow h-100 py-2">
                         <div class="card-body">
@@ -49,6 +53,7 @@
                 </div>
 
                 <!-- Pending Requests Card Example -->
+                <a class="col-xl-3 col-md-6 mb-4"  href="Views\Admin\alquileres\Listar.php">
                 <div class="col-xl-3 col-md-6 mb-4">
                     <div class="card border-0 bg-secondary shadow h-100 py-2">
                         <div class="card-body">
