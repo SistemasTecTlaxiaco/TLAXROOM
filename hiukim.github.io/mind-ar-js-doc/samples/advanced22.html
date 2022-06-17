@@ -1,0 +1,513 @@
+<html>
+  
+<!-- Mirrored from hiukim.github.io/mind-ar-js-doc/samples/advanced.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 01 Apr 2022 00:39:01 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <script src="../../../cdn.jsdelivr.net/gh/hiukim/mind-ar-js%401.0.0/dist/mindar-image.prod.js"></script>
+    <script src="../../../aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="../../../cdn.jsdelivr.net/gh/hiukim/mind-ar-js%401.0.0/dist/mindar-image-aframe.prod.js"></script>
+    <script src="https://aframe.io/releases/1.0.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.6.0/aframe/build/aframe-ar.js"></script>
+    <script src="https://rawgit.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+    <!-- FINALIZAN LOS SCRIPTS -->
+    
+    <script>
+      const showInfo = () => {
+        let y = 0;
+        const microfButton = document.querySelector("#microf-button");
+        const webButton = document.querySelector("#web-button");
+        //const serviButton = document.querySelector("#servi-button");
+       // const locationButton = document.querySelector("#location-button");
+        const text = document.querySelector("#text");
+
+        microfButton.setAttribute("visible", true);
+        setTimeout(() => {
+          webButton.setAttribute("visible", true);
+        }, 300);
+        setTimeout(() => {
+          serviButton.setAttribute("visible", true);
+        }, 600);
+        
+        let currentTab = '';
+        webButton.addEventListener('click', function (evt) {
+          
+          text.setAttribute("value", "http://localhost/tlaxroom-img/demomarcadorimg/");
+          currentTab = 'web';
+        });
+        /*serviButton.addEventListener('click', function (evt) {
+          text.setAttribute("value", "Lista de servicios");
+          currentTab = 'servi';
+        });*/
+        //pendiente 
+        microfButton.addEventListener('click', function (evt) {
+          text.setAttribute("value", "AR, VR Soluciones y consulta");
+          currentTab = 'profile';
+        });
+        text.addEventListener('click', function (evt) {
+          if (currentTab === 'web') {
+            window.location.href="http://localhost/tlaxroom-img/demomarcadorimg/";
+          }
+        });
+      }
+
+      const showPortfolio = (done) => {
+        const portfolio = document.querySelector("#portfolio-panel");
+        const portfolioLeftButton = document.querySelector("#portfolio-left-button");
+        const portfolioRightButton = document.querySelector("#portfolio-right-button");
+        const paintandquestPreviewButton = document.querySelector("#paintandquest-preview-button");
+
+        let y = 0;
+        let currentItem = 0;
+
+        portfolio.setAttribute("visible", true);
+
+        const showPortfolioItem = (item) => {
+          for (let i = 0; i <= 2; i++) {
+            document.querySelector("#portfolio-item" + i).setAttribute("visible", i === item);
+          }
+        }
+        const id = setInterval(() => {
+          y += 0.008;
+          if (y >= 0.6) {
+            clearInterval(id);
+            portfolioLeftButton.setAttribute("visible", true);
+            portfolioRightButton.setAttribute("visible", true);
+            portfolioLeftButton.addEventListener('click', () => {
+              currentItem = (currentItem + 1) % 3;
+              showPortfolioItem(currentItem);
+            });
+            portfolioRightButton.addEventListener('click', () => {
+              currentItem = (currentItem - 1 + 3) % 3;
+              showPortfolioItem(currentItem);
+            });
+
+            paintandquestPreviewButton.addEventListener('click', () => {
+              paintandquestPreviewButton.setAttribute("visible", false);
+              const testVideo = document.createElement( "video" );
+              const canplayWebm = testVideo.canPlayType( 'video/webm; codecs="vp8, vorbis"' );
+              if (canplayWebm == "") {
+                document.querySelector("#paintandquest-video-link").setAttribute("src", "#paintandquest-video-mp4");
+                document.querySelector("#paintandquest-video-mp4").play();
+              } else {
+                document.querySelector("#paintandquest-video-link").setAttribute("src", "#paintandquest-video-webm");
+                document.querySelector("#paintandquest-video-webm").play();
+              }
+            });
+
+            setTimeout(() => {
+              done();
+            }, 500);
+          }
+          portfolio.setAttribute("position", "0 " + y + " -0.01");
+        }, 10);
+      }
+
+      const showAvatar = (onDone) => {
+        const avatar = document.querySelector("#avatar");
+        let z = -0.3;
+        const id = setInterval(() => {
+          z += 0.008;
+          if (z >= 0.3) {
+            clearInterval(id);
+            onDone();
+          }
+          avatar.setAttribute("position", "0 -0.25 " + z);
+        }, 10);
+      }
+
+      AFRAME.registerComponent('mytarget', {
+      init: function () {
+        this.el.addEventListener('targetFound', event => {
+          console.log("target found");
+          showAvatar(() => {
+            //
+            setTimeout(() => {
+              showInfo();
+            }, 300);
+          });
+        });
+        this.el.addEventListener('targetLost', event => {
+          console.log("target found");
+        });
+        //this.el.emit('targetFound');
+      }
+    });
+    </script>
+
+    <style>
+      body {
+        margin: 0;
+      }
+      .example-container {
+        overflow: hidden;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+     
+      #example-scanning-overlay {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background: transparent;
+	z-index: 2;
+      }
+      @media (min-aspect-ratio: 1/1) {
+	#example-scanning-overlay .inner {
+	  width: 50vh;
+	  height: 50vh;
+	}
+      }
+      @media (max-aspect-ratio: 1/1) {
+	#example-scanning-overlay .inner {
+	  width: 80vw;
+	  height: 80vw;
+	}
+      }
+      #example-scanning-overlay .inner {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+
+	background:
+	  linear-gradient(to right, white 10px, transparent 10px) 0 0,
+	  linear-gradient(to right, white 10px, transparent 10px) 0 100%,
+	  linear-gradient(to left, white 10px, transparent 10px) 100% 0,
+	  linear-gradient(to left, white 10px, transparent 10px) 100% 100%,
+	  linear-gradient(to bottom, white 10px, transparent 10px) 0 0,
+	  linear-gradient(to bottom, white 10px, transparent 10px) 100% 0,
+	  linear-gradient(to top, white 10px, transparent 10px) 0 100%,
+	  linear-gradient(to top, white 10px, transparent 10px) 100% 100%;
+	background-repeat: no-repeat;
+	background-size: 40px 40px;
+      }
+
+      #example-scanning-overlay.hidden {
+	display: none;
+      }
+
+      #example-scanning-overlay img {
+	opacity: 0.6;
+	width: 90%;
+	align-self: center;
+      }
+
+      #example-scanning-overlay .inner .scanline {
+	position: absolute;
+	width: 100%;
+	height: 10px;
+	background: white;
+	animation: move 2s linear infinite;
+      }
+      @keyframes move {
+	0%, 100% { top: 0% }
+	50% { top: calc(100% - 10px) }
+      }
+      text{font-family:Verdana;font-family:Vegur,'PT Sans',Verdana,sans-serif;}
+      .contenedor{margin:0px;height:100vh;width:100vw;background-image:radial-gradient(circle at 52.12% 74.26%,#a225c9 0,#8120b8 25%,#5f19a4 50%,#3c1290 75%,#110d7c 100%);position:fixed;z-index:9999;transition:all 1.5s;}.carga,.carga:before,.carga:after{width:100%;height:100%;}
+      .rotate-45{transform-origin:center;transform:rotate(45deg)}
+      .rotate{transform-origin:center;animation:rotate 1s ease-in-out infinite;}.rotate-back{transform-origin:center;animation:rotate 1s ease-in-out infinite;animation-direction:reverse;}.left1{animation:moved 1s ease-in-out infinite;}.right1{animation:moved 1s ease-in-out infinite;}@keyframes rotate{100%{transform:rotate(calc(90deg + 45deg))}}
+      @keyframes moved{50%{transform:translate(-30px,-30px)}}
+      .cargando,.percentage{height:10px;max-width:100px;border:2px solid rgba(255,255,255,0.596);
+        background-color:rgba(0,0,0,0.089);border-radius:20px;font-weight:300;position:absolute;top:180px;bottom:0;left:0;right:0;margin:auto;}
+        .cargando:after,.percentage:after{content:"";display:block;width:100%;height:100%;position:absolute;top:180px;left:0;}.trackbar{width:100%;height:100%;border-radius:5px;color:#fff;text-align:center;line-height:30px;overflow:hidden;position:relative;opacity:0.99;}
+        .loadbar{width:0%;height:100%;background:repeating-linear-gradient(45deg,#a225c9,#a225c9 10px,white 10px,white 20px);box-shadow:0px 0px 14px 1px #E766B6;position:absolute;top:0;left:0;animation:flicker 5s infinite;overflow:hidden;}
+    </style>
+     <!--cambios-->
+     <script>
+      window.addEventListener('load', () => {
+        const contenedor = document.querySelector('.contenedor');
+        contenedor.style.visibility = 'hidden';
+        contenedor.style.opacity = 0;
+        contenedor.setAttribute("visible", false);
+  
+        let width = 100, 
+          perfData = window.performance.timing, 
+          EstimatedTime = -(perfData.load - perfData.navigationStart), 
+          time = parseInt((EstimatedTime/1000)%60)*100;
+  // Loadbar Animation
+  $(".loadbar").animate({
+  width: width + "%"
+  }, time);
+  
+  // Percentage Increment Animation
+  let PercentageID = $("#precent"),
+  start = 0,
+  end = 100,
+  durataion = time;
+  animateValue(PercentageID, start, end, durataion);
+  
+  function animateValue(id, start, end, duration) {
+  
+  let range = end - start,
+    current = start,
+    increment = end > start? 1 : -1,
+    stepTime = Math.abs(Math.floor(duration / range)),
+    obj = $(id);
+  
+  }
+  // Fading Out Loadbar on Finised
+  setTimeout(function(){
+  $('.contenedor').fadeOut(100);
+  }, time);
+      });
+    </script>
+    <!--finalizando cambios -->
+  </head>
+  <body>
+    <!--cambios-->
+    <div class="contenedor">
+      <svg class="carga" width="1000" height="1000" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg"
+        version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g transform="translate(500,500)">
+          <rect class="rotate-45 rotate-back" x=-5 y=-5 width=10 height=10 stroke="white" stroke-width=20 fill="none" />
+          <rect class="rotate-45 rotate" x=-50 y=-50 width=100 height=100 stroke="#E766B6" stroke-width=20
+            stroke-linejoin="bevel" fill="none" />
+          <g transform="translate(-50,0) rotate(-45)">
+            <polyline class="left1" points="40,-40 50,-50 -40,-50 -50,-40 -50,50 -40,40" stroke="black" stroke-width=20
+              fill="none" />
+          </g>
+          <g transform="translate(50,0) rotate(135)">
+            <polyline class="right1" points="40,-40 50,-50 -40,-50 -50,-40 -50,50 -40,40" stroke="white" stroke-width=20
+              fill="none" />
+          </g>
+          <!--text y=-140 text-anchor="middle" font-weight="bold" font-size="3em" font-family="Bebas Neue">Cargando componetes...</text-->
+        </g>
+        <g transform="translate(435,435) scale(5 5)"><g xmlns="http://www.w3.org/2000/svg" fill="#212121" stroke-width=20>
+          <path  d="m12.29 21.499c3.73 0 8.94.09 10.835-3.701.715-1.449.875-3.122.875-4.7h-.001c0-2.073-.575-4.047-1.95-5.651.786-2.363.26-3.756-.345-4.948-2.24 0-3.69.42-5.39 1.742-2.746-.653-5.856-.571-8.455.04-1.725-1.336-3.175-1.781-5.44-1.781-.621 1.237-1.136 2.599-.344 4.977-2.676 3.083-2.466 7.566-1.065 10.322 1.97 3.835 7.49 3.7 11.28 3.7zm-5.289-9.99c.95 0 1.865.168 2.8.297 3.418.52 5.215-.297 7.31-.297 2.339 0 3.675 1.915 3.675 4.087 0 4.349-4.015 5.012-7.53 5.012-2.419-.163-9.93.976-9.93-5.012 0-2.172 1.334-4.087 3.675-4.087z" fill="#ffffff" data-original="#212121"/>
+          <path d="m16.655 18.323c1.29 0 1.835-1.692 1.835-2.727s-.545-2.727-1.835-2.727-1.835 1.692-1.835 2.727.545 2.727 1.835 2.727z" fill="#ffffff" data-original="#212121"/>
+          <path d="m7.47 18.323c1.29 0 1.835-1.692 1.835-2.727s-.546-2.726-1.835-2.726-1.835 1.692-1.835 2.727.545 2.726 1.835 2.726z" fill="#ffffff" data-original="#212121"/>
+        </g></g>
+      </svg>
+            <div class="percentage" id="precent"></div>
+            <div class="cargando">
+              <div class="trackbar">
+                <div class="loadbar"></div>
+              </div>
+            </div>
+         
+    </div>
+    <!--finalizando cambios -->
+    <div class="example-container">
+      <div id="example-scanning-overlay" class="hidden">
+	<div class="inner">
+	  <img src="assets/card-example/card.png"/>
+	  <div class="scanline"></div>
+	</div>
+      </div>
+      <a-scene mindar-image="imageTargetSrc: http://localhost/tlaxroom-img/demomarcadorimg//tlaxroom.mind; showStats: false; uiScanning: #example-scanning-overlay;" embedded color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+        <a-assets>
+          <img id="card" src="assets/card-example/card.png" />
+          <img id="icon-web" src="assets/card-example/icons/web.png" />
+          <img id="icon-micro" src="assets/card-example/icons/microfono.png" />
+          <!--img id="icon-servi" src="assets/card-example/icons/servicios.png" /-->
+          <img id="icon-play" src="assets/card-example/icons/play.png" />
+          <img id="icon-left" src="assets/card-example/icons/left.png" />
+          <img id="icon-right" src="assets/card-example/icons/right.png" />
+          <img id="paintandquest-preview" src="assets/card-example/portfolio/Login1.png" />
+          <img id="coffeemachine-preview" src="assets/card-example/portfolio/Login2.png" />
+          <img id="peak-preview" src="assets/card-example/portfolio/Login3.png" />
+          
+          <a-asset-item id="avatarModel" src="http://localhost/tlaxroom-img/demomarcadorimg/Tlax-room.glb"></a-asset-item>
+        </a-assets>
+
+        <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" raycaster="far: 10000; objects: .clickable">
+        </a-camera>
+
+        <a-entity id="mytarget" mytarget mindar-image-target="targetIndex: 0">
+          <a-plane src="#card" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
+
+          <a-entity visible=false id="portfolio-panel" position="0 0 -0.01">
+            <!--a-text value="Portfolio" color="black" align="center" width="2" position="0 0.4 0"></a-text-->
+            <a-entity id="portfolio-item0">
+              <a-video id="paintandquest-video-link" webkit-playsinline playsinline width="1" height="0.552" position="0 0 0"></a-video>
+              <a-image id="paintandquest-preview-button" class="clickable" src="#paintandquest-preview" alpha-test="0.5" position="0 0 0" height="0.552" width="1">
+              </a-image>
+            </a-entity>
+            <a-entity id="portfolio-item1" visible=false>
+              <a-image class="clickable" src="#coffeemachine-preview" alpha-test="0.5" position="0 0 0" height="0.552" width="1">
+              </a-image>
+            </a-entity>
+            <a-entity id="portfolio-item2" visible=false>
+              <a-image class="clickable" src="#peak-preview" alpha-test="0.5" position="0 0 0" height="0.552" width="1">
+              </a-image>
+            </a-entity>
+
+            <a-image visible=false id="portfolio-left-button" class="clickable" src="#icon-left" position="-0.7 0 0" height="0.15" width="0.15"></a-image>
+            <a-image visible=false id="portfolio-right-button" class="clickable" src="#icon-right" position="0.7 0 0" height="0.15" width="0.15"></a-image>
+          </a-entity>
+
+          <a-image visible=false id="microf-button" class="clickable" src="#icon-microf" position="-0.42 -0.5 0" height="0.15" width="0.15"
+            animation="property: scale; to: 1.2 1.2 1.2; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
+          ></a-image>
+
+          <a-image visible=false id="web-button" class="clickable" src="#icon-web" alpha-test="0.5" position="-0.14 -0.5 0" height="0.15" width="0.15"
+            animation="property: scale; to: 1.2 1.2 1.2; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate"
+          ></a-image>
+
+         <a-gltf-model id="avatar" rotation="0 0 0" position="0 -0.25 0" scale="0.1 0.1 0.1" src="#avatarModel"></a-gltf-model>
+
+          <a-text id="text" class="clickable" value="" color="black" align="center" width="2" position="0 -1 0" geometry="primitive:plane; height: 0.1; width: 2;" material="opacity: 0.5"></a-text>
+        </a-entity>
+      </a-scene>
+    </div>
+  </body>
+  <script>
+//Asistente 
+window.contador = 0;
+  window.contadorcubogrande = 0;
+  var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+  var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+  var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
+/* CREAMOS UN ARREGLO LLAMADO arreglovoz EL CUAL CONTRENDRA TODOS LOS COMANDOS QUE QUERAMOS AGREGAR Y QUE EL SISTEMA RECONOCERA */
+var arreglovoz = [  'Hola roommi',
+                'Gracias rommi',
+                'rommi eso es todo por ahora',
+                'rommi dime los servicios del cuarto',
+                'rommi entonces muestra la recamara',
+                'rommi quiero ver la recamara más grande', 
+                'rommi quiero ver la recamara más pequeña',
+                'romi regresa a la recamara'];
+                var grammar = '#JSGF V1.0; grammar arreglovoz; public <arreglovoz> = ' + arreglovoz.join(' | ') + ' ;'
+
+var recognition = new SpeechRecognition();
+var speechRecognitionList = new SpeechGrammarList();
+speechRecognitionList.addFromString(grammar, 1);
+recognition.grammars = speechRecognitionList;
+recognition.continuous = false;
+recognition.lang = 'es-MX';
+recognition.interimResults = false;
+recognition.maxAlternatives = 1;
+
+var diagnostic = document.querySelector('#text'); 
+var vozHTML = '';
+arreglovoz.forEach(function (v, i, a) {
+  console.log(v, i);
+
+});
+
+window.onload = function() {
+function micro(){
+recognition.start();
+console.log('Estoy listo para escuchar.');
+}
+document.getElementById('microf-button').onclick = micro;
+}
+
+recognition.onresult = function (event) {
+  var voz = event.results[0][0].transcript;         
+  diagnostic.setAttribute("value", "Dijiste: " + voz + ".");
+  bg = voz;
+  var bg = document.querySelector('text');
+
+
+  //VISUALIZO EN CONSOLA
+  console.log(bg);
+  console.log(voz);
+
+  function randD(array) {
+    var rand = Math.random() * array.length | 0;
+    var result = array[rand];
+    return result;
+  }
+
+  // Interacciones iniciales
+  if (voz === 'Hola rommi') {
+    console.log("Hola, estas saludando!");
+    let utterance = new SpeechSynthesisUtterance('Hola usuario de Tlaxroom, bienvenido. Ya estoy listo para escuchar tus comandos y resolver tus dudas. Te escucho...')
+    utterance.lang = 'es-MX'
+    speechSynthesis.speak(utterance)
+  }
+
+
+  if (voz === 'gracias rommi') {
+    console.log("Estas dando las gracias");
+    let utterance = new SpeechSynthesisUtterance('de nada, quieres que te ayude con algo mas?')
+    utterance.lang = 'es-MX'
+    speechSynthesis.speak(utterance)
+  }
+
+
+  if (voz === 'rommi eso es todo por ahora') {
+    console.log("Hola, estas saludando!");
+    let utterance = new SpeechSynthesisUtterance('de nada , siempre es un placer ayudarte.')
+    utterance.lang = 'es-MX'
+    speechSynthesis.speak(utterance)
+  }
+
+  if (voz === 'rommi dime los servicios del cuarto') {
+    console.log("Rommi dando los servicios!");
+    let utterance = new SpeechSynthesisUtterance('Claro que si amigo!, Los servicios basicos de este cuarto son: Agua, Luz, Internet por Wifi, baño individual. si quieres saber mas acerca de este espacio te invito a contactar al propietario, la información la encuentras en nuestro sitio. ')
+    utterance.lang = 'es-MX'
+    speechSynthesis.speak(utterance)
+  }
+  //interaccion con RA         
+  if (voz === 'rommi entonces muestra la recamara') {
+    console.log("Estas visualizando la recamara en 3D!!");
+
+    if (contador == 0) {
+      var el = document.querySelector('#avatar');
+      el.setAttribute("src", "../../cama.glb");
+      let utterance = new SpeechSynthesisUtterance('Como puedes observar la habitación es agradable y esta en buenas condiciones, anímate! y puedes hacer de ella tu hogar')
+      utterance.lang = 'es-MX'
+      speechSynthesis.speak(utterance)
+    }
+    contador++;
+    console.log(contador);
+  }
+
+  if (voz === 'rommi quiero ver la recamara más grande') {
+    console.log("Estas intentando ver la recámara mas grande");
+    if (contadorcubogrande == 0) {
+      var el = document.querySelector('#avatar');
+      el.setAttribute("src", "cama.glb");
+      el.setAttribute("scale", '2 2 2');
+
+      let utterance = new SpeechSynthesisUtterance('Excelente amigo!. Ahora tu recámara  es más grande pero no me pidas hacerlo de nuevo por que es imposible. ok?')
+      utterance.lang = 'es-MX'
+      speechSynthesis.speak(utterance)
+    }
+
+    if (contadorcubogrande == 1) {
+      let utterance = new SpeechSynthesisUtterance('Amigo ¡¡para ya!!... por favor,Ya te dije que no puedo hacer la recámara mas grande?')
+      utterance.lang = 'es-MX'
+      speechSynthesis.speak(utterance)
+      contadorcubogrande = 0;
+    }
+    contadorcubogrande++;
+  }
+
+  if (voz === 'rommi quiero ver la recámara más pequeña') {
+    console.log("Estas queriendo ver la recámara mas pequeña");
+    var el = document.querySelector('#avatar');
+    el.setAttribute("src", "cama.glb");
+    el.setAttribute("scale", '0.1 0.1 0.1');
+
+    let utterance = new SpeechSynthesisUtterance('Reduciendo la recáma. Ahora a vuelto a su tamaño normal.')
+    utterance.lang = 'es-MX'
+    speechSynthesis.speak(utterance)
+  }
+  console.log('Confidence: ' + event.results[0][0].confidence);
+}
+
+recognition.onspeechend = function () {
+  recognition.stop();
+}
+
+recognition.onnomatch = function (event) {
+  diagnostic.setAttribute("value", "No puedo escucharte claramente, por favor repiteme.");
+}
+
+recognition.onerror = function (event) {
+  diagnostic.setAttribute("value", 'Ocurrio un error al escucharte: ' + event.error);
+}
+</script>
+</html>
